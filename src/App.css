@@ -40,3 +40,8 @@
 .read-the-docs {
   color: #888;
 }
+
+.connectButton{
+  display: flex;
+  justify-content: flex-end;
+}
