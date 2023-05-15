@@ -1,0 +1,23 @@
+@import "./../../assets/styles/main.scss";
+
+.formControl {
+    display: flex;
+    flex-direction: column;
+}
+
+.submitButton {
+    margin-top: 15px;
+}
+
+.submitButton > button {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 11px;
+    text-align: center;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 5px;
+    background-color: $c-accent;
+    width: 130px;
+    cursor: pointer;
+}
