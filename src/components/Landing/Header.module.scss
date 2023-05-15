@@ -1,0 +1,51 @@
+.header {
+    height: 100vh;
+}
+
+.actionBlock {
+    height: 100%;
+    padding: 0 7em 0 7em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.actionBlock > h1 {
+    text-align: center;
+}
+
+.title {
+    display: flex;
+    flex: 0.7;
+    justify-content: center;
+    align-items: center;
+}
+
+.selectUser {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 5em;
+}
+
+.user {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    border: 2px solid white;
+}
+
+.admin {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    border: 2px solid white;
+}
+
+.user:hover,
+.admin:hover {
+    background-color: white;
+    color: black;
+    cursor: pointer;
+}

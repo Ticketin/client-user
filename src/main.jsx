@@ -6,8 +6,9 @@ import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
+import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
-import "./index.css";
+import "./assets/styles/global.scss";
 
 const ALCHEMY_API_KEY = import.meta.env.VITE_ALCHEMY_API_KEY;
 
@@ -39,12 +40,16 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <WagmiConfig client={client}>
         <ConnectKitProvider
             mode="light"
-            customTheme={{
-                "--ck-accent-color": "#F3EF52",
-                "--ck-accent-text-color": "#ffffff",
-            }}
+            customTheme={
+                {
+                    // "--ck-accent-color": "#F3EF52",
+                    // "--ck-accent-text-color": "#ffffff",
+                }
+            }
         >
-            <App />
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
         </ConnectKitProvider>
     </WagmiConfig>
 );
