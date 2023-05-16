@@ -10,7 +10,7 @@ const Header = () => {
             <Navigation />
             <div className={styles.actionBlock}>
                 <div className={styles.title}>
-                    <h1>Pick Your Side 😎</h1>
+                    <h1>Pick Your Side 🐱‍👤</h1>
                 </div>
                 <div className={styles.selectUser}>
                     <div className={styles.user}>
