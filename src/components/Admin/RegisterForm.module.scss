@@ -10,6 +10,7 @@
 }
 
 .submitButton > button {
+    margin-top: 15px;
     font-size: 14px;
     font-weight: 600;
     padding: 11px;
@@ -18,6 +19,19 @@
     border: none;
     border-radius: 5px;
     background-color: $c-accent;
-    width: 130px;
+    width: 150px;
     cursor: pointer;
+}
+
+.txSuccess{
+    color: rgb(32, 107, 76);
+    border-radius: 2px;
+    margin: 2em 0 1em 0;
+    padding: 5px;
+    border: 1px solid rgb(15, 241, 15);
+    background-color: rgb(143, 235, 178);
+}
+
+.txSuccess > p{
+    font-size: $fs-300;
 }

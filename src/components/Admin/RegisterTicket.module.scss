@@ -1,25 +1,12 @@
+@import "./../../assets/styles/main.scss";
 
 .registerTicketContainer {
-    background: rgba(255, 255, 255, 0.466);
+    flex: 1;
+    background: $c-secondary;
     border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 50px;
 }
 
-.gridContainer {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(1, 1fr);
-    gap: 20px;
-    height: 100%;
-}
-
-.formContainer {
-    padding: 40px;
-}
-
-.resultContainer {
-
+.formContainer > h2{
+    margin-bottom: 25px;
 }
