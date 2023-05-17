@@ -9,6 +9,7 @@ import { publicProvider } from "wagmi/providers/public";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 import "./assets/styles/global.scss";
+import { DataContextProvider } from "./context/data-context";
 
 const ALCHEMY_API_KEY = import.meta.env.VITE_ALCHEMY_API_KEY;
 
@@ -48,7 +49,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             }
         >
             <BrowserRouter>
-                <App />
+                <DataContextProvider>
+                    <App />
+                </DataContextProvider>
             </BrowserRouter>
         </ConnectKitProvider>
     </WagmiConfig>
