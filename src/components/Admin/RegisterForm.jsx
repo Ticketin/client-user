@@ -7,6 +7,9 @@ import { ticketCollectionFactoryAbi } from "../../constants";
 import styles from "./RegisterForm.module.scss";
 import useDebounce from "../../hooks/useDebounce";
 import { useAccount, useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
+import { useContractReadsMultiData } from "../../hooks/useContractReadsMultiData";
+import { useContext } from "react";
+import DataContext from "../../context/data-context";
 
 const RegisterForm = () => {
     const { chain } = useNetwork();
@@ -46,11 +49,17 @@ const RegisterForm = () => {
 
     const { data, error, isError, write: createNewEvent } = useContractWrite(config);
 
+    // refetches the data of the newly deployed ticketCollection
+    const { fetchNftContractAddress } = useContractReadsMultiData();
+
     // wait for the transaction to finish so we can refresh the data on success
     const { isLoading, isSuccess } = useWaitForTransaction({
         hash: data?.hash,
         onSuccess(data) {
             console.log(`event added!`);
+            console.log(data);
+            fetchNftContractAddress();
+            // fetchMultiData();
         },
     });
 
