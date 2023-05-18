@@ -3,6 +3,7 @@ import RegisterTicket from "./components/RegisterTicket/RegisterTicket";
 import ConnectButton from "./components/UI/ConnectButton";
 import Landing from "./pages/Landing";
 import Admin from "./pages/Admin";
+import User from "./pages/User";
 
 function App() {
     return (
@@ -10,6 +11,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Landing />} />
                 <Route path="/admin" element={<Admin />} />
+                <Route path="/user" element={<User />} />
             </Routes>
             {/* <div className="connectButton">
                 <ConnectButton />

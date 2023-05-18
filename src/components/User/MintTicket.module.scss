@@ -1,0 +1,31 @@
+.titleWrapper {
+    max-width: 1000px;
+    margin: auto auto;
+}
+
+.flexContainer {
+    display: flex;
+    justify-content: space-between;
+    height: 300px;
+}
+
+.mintButtonContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: yellow;
+    flex: 1;
+    padding: 2rem;
+}
+
+.mintedTicketContainer {
+    background-color: blue;
+    flex: 1;
+    padding: 2rem;
+}
+
+.mintedTicketData {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
