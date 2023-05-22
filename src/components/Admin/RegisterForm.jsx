@@ -10,11 +10,11 @@ import { useAccount, useContractWrite, useNetwork, usePrepareContractWrite, useW
 import { useContractReadsMultiData } from "../../hooks/useContractReadsMultiData";
 import { useContext } from "react";
 import DataContext from "../../context/data-context";
+import { useGenerateAndUploadMetaData } from "../../hooks/useGenerateAndUploadMetadata";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const RegisterForm = () => {
-    const { chain } = useNetwork();
-    const { isConnected, address } = useAccount();
-
     const {
         register,
         formState: { errors },
@@ -24,11 +24,18 @@ const RegisterForm = () => {
         mode: "all", // "onChange" + "onBlur"
     });
 
-    const watchEventName = watch("eventName", false); // false is defeault value
+    const eventName = watch("eventName", false); // false is defeault value
     const eventSymbol = watch("eventSymbol", false);
+    const eventDescription = watch("eventDescription", false);
+    const ticketAmount = watch("ticketAmount", false); // should be passed to constructor
+    const ticketPrice = watch("ticketPrice", false);
+    const [baseURI, setBaseURI] = useState(null);
+    const [isMetaDataGenerated, setIsMetaDataGenerated] = useState(false);
+
+    const { createTickets: createTickets, collectionCid: collectionCid } = useGenerateAndUploadMetaData(1, eventName, eventDescription, ticketAmount, ticketPrice);
 
     // debouncing watched variables so we don't overload the RPC in usePrepareContractWrite
-    const debouncedName = useDebounce(watchEventName);
+    const debouncedName = useDebounce(eventName);
     const debouncedSymbol = useDebounce(eventSymbol);
 
     // prepares the contract write, this way we pre-send our args to the RPC, we can catch errors before we send.
@@ -43,8 +50,8 @@ const RegisterForm = () => {
         address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
         abi: ticketCollectionFactoryAbi,
         functionName: "deployNewTicketCollection",
-        enabled: true,
-        args: [debouncedName, debouncedSymbol, address],
+        enabled: baseURI,
+        args: [debouncedName, debouncedSymbol, ticketAmount, ticketPrice, baseURI],
     });
 
     const { data, error, isError, write: createNewEvent } = useContractWrite(config);
@@ -63,13 +70,25 @@ const RegisterForm = () => {
         },
     });
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         console.log("adding new event");
+
         createNewEvent?.();
+    };
+
+    const handleGenerateMetadata = async () => {
+        const tempCid = await createTickets();
+        setBaseURI(`ipfs.io/ipfs/${tempCid}`);
+        setIsMetaDataGenerated(true);
     };
 
     return (
         <>
+            {isSuccess ? (
+                <div className={styles.txSuccess}>
+                    <p> ✅ Succesfully added new event!</p>
+                </div>
+            ) : null}
             <form className={styles.registerTicketForm} onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <InputField
@@ -77,6 +96,7 @@ const RegisterForm = () => {
                         name="eventName"
                         label="Event Name"
                         errors={errors}
+                        readOnly={isMetaDataGenerated}
                         register={register}
                         validationSchema={{
                             required: "Event Name is required",
@@ -89,6 +109,19 @@ const RegisterForm = () => {
                         label="Event Symbol"
                         errors={errors}
                         register={register}
+                        readOnly={isMetaDataGenerated}
+                        validationSchema={{
+                            required: "Event Symbol is required.",
+                        }}
+                        required
+                    />
+                    <InputField
+                        type="text"
+                        name="eventDescription"
+                        label="Event Description"
+                        errors={errors}
+                        register={register}
+                        readOnly={isMetaDataGenerated}
                         validationSchema={{
                             required: "Event Symbol is required.",
                         }}
@@ -112,25 +145,27 @@ const RegisterForm = () => {
                         label="Total Ticket Amount"
                         errors={errors}
                         register={register}
+                        readOnly={isMetaDataGenerated}
                         validationSchema={{
                             required: "Ticket amount is required",
                             maxLength: { value: 32, message: "Can't be more than 32 characters" },
                         }}
                         required
                     />
-                    {/* <InputField
+                    <InputField
                         type="number"
                         name="ticketPrice"
                         label="Single Ticket Price"
                         errors={errors}
                         register={register}
+                        readOnly={isMetaDataGenerated}
                         validationSchema={{
                             required: "Ticket price is required",
                             maxLength: { value: 32, message: "Can't be more than 32 characters" },
                         }}
                         required
                     />
-                    <Dropdown
+                    {/* <Dropdown
                         name="role"
                         label="Ticket Type"
                         register={register}
@@ -144,17 +179,19 @@ const RegisterForm = () => {
                             required: "Role is required.",
                         }}
                         required
-                    /> */}
+                    />  */}
                 </div>
                 <div className={styles.submitButton}>
-                    <button type="submit">Create Event</button>
+                    <button disabled={!createNewEvent} type="submit">
+                        Create Collection
+                    </button>
                 </div>
-                {isSuccess ? (
-                    <div className={styles.txSuccess}>
-                        <p> ✅ Succesfully added new event!</p>
-                    </div>
-                ) : null}
             </form>
+            <div className={styles.submitButton}>
+                <button disabled={isMetaDataGenerated} onClick={handleGenerateMetadata}>
+                    Generate Metadata
+                </button>
+            </div>
         </>
     );
 };
