@@ -16,7 +16,7 @@ const EventsList = () => {
             <h2>My Running Events</h2>
             {eventData?.[0] && isConnected ? (
                 <div className={styles.eventsWrapper}>
-                    <SingleEvent eventName={eventData[0]} eventSymbol={eventData[1]} ticketsSold={eventData[2]?.toString()} />
+                    <SingleEvent eventName={eventData[0]} eventSymbol={eventData[1]} ticketsSold={eventData[2]?.toString()} tokenURI={eventData[3]} />
                 </div>
             ) : null}
         </div>

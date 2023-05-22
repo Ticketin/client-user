@@ -1,9 +1,6 @@
-import RegisterTicket from "../components/Admin/RegisterTicket";
-import EventsList from "../components/Admin/EventsList";
-import ConnectButton from "../components/UI/ConnectButton";
-
 import styles from "./User.module.scss";
-import MintTicket from "../components/User/MintTicket";
+import ConnectButton from "../components/UI/ConnectButton";
+import EventOverview from "../components/User/EventOverview";
 
 const User = () => {
     return (
@@ -12,7 +9,8 @@ const User = () => {
                 <ConnectButton />
             </div>
             <div className={styles.flexContainer}>
-                <MintTicket />
+                {/* <MintTicket /> */}
+                <EventOverview />
             </div>
         </div>
     );
