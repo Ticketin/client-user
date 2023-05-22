@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 import styles from "./InputField.module.scss";
 
-const InputField = ({ name, label, register, errors, required, type, validationSchema }) => {
+const InputField = ({ name, label, register, disabled, readOnly, errors, required, type, validationSchema }) => {
     const variants = {
         valid: {
             backgroundColor: "#ffffff",
@@ -23,7 +23,7 @@ const InputField = ({ name, label, register, errors, required, type, validationS
                 {label}
                 {required && "*"}
             </label>
-            <motion.input className={styles.formInput} animate={errors[name] ? "error" : "valid"} variants={variants} id={name} name={name} type={type} {...register(name, validationSchema)} />
+            <motion.input readOnly={readOnly} data-isReadOnly={readOnly} className={styles.formInput} animate={errors[name] ? "error" : "valid"} variants={variants} id={name} name={name} type={type} {...register(name, { disabled: disabled }, validationSchema)} />
             {errors[name] && <p className={styles.errorMessage}>{errors[name]?.message}</p>}
         </div>
     );
