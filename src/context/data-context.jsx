@@ -7,18 +7,25 @@ const DataContext = React.createContext({
 
 export const DataContextProvider = (props) => {
     const [eventData, setEventData] = useState(null);
+    const [eventDataUser, setEventDataUser] = useState(null);
 
     const updateEventData = (newEventData) => {
         console.log(`updating event data!`);
         setEventData(newEventData);
     };
 
+    const updateEventDataUser = (newEventData) => {
+        console.log(`updating event data!`);
+        setEventDataUser(newEventData);
+    };
+
     return (
         <DataContext.Provider
             value={{
                 eventData: eventData,
+                eventDataUser: eventDataUser,
                 updateEventData: updateEventData,
-                // onConnect: connectWalletHandler,
+                updateEventDataUser: updateEventDataUser,
             }}
         >
             {props.children}
