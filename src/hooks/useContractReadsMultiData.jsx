@@ -6,12 +6,13 @@ import DataContext from "../context/data-context";
 export const useContractReadsMultiData = () => {
     const { address } = useAccount();
 
-    const { updateEventData } = useContext(DataContext);
+    const { eventData, updateEventData } = useContext(DataContext);
 
     const { data: nftContractAddress, refetch: fetchNftContractAddress } = useContractRead({
         address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
         abi: ticketCollectionFactoryAbi,
         functionName: "adminToCollection",
+        watch: true,
         args: [address],
         onSuccess(data) {
             console.log(`succesfully fetched contractAddress`);
@@ -39,6 +40,10 @@ export const useContractReadsMultiData = () => {
                 ...nftContractConfig,
                 functionName: "getTokenId",
             },
+            {
+                ...nftContractConfig,
+                functionName: "baseURI",
+            },
         ],
         onSuccess(data) {
             console.log(`--FETCHED MULTIDATA---`);
@@ -48,5 +53,6 @@ export const useContractReadsMultiData = () => {
     });
     return {
         fetchNftContractAddress,
+        eventData,
     };
 };

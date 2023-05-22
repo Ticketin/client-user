@@ -17,7 +17,7 @@ const { provider, webSocketProvider, chains } = configureChains([hardhat, mainne
 
 // add new connectors https://wagmi.sh/react/connectors/coinbaseWallet
 const client = createClient({
-    autoConnect: false,
+    autoConnect: true,
     connectors: [
         new MetaMaskConnector({
             chains: chains,
