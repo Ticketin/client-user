@@ -7,6 +7,7 @@ import nbaLogo from "./../../assets/images/nba-logo.png";
 import styles from "./MintTicket.module.scss";
 import FlipCard, { BackCard, FrontCard } from "../UI/FlipCard";
 
+// CURRENTLY UNUSED CODE, USE ONLY FOR REFERENCE
 const MintTicket = () => {
     const { isConnected, address } = useAccount();
 

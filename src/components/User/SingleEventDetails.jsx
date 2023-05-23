@@ -9,17 +9,19 @@ import QRCode from "react-qr-code";
 
 import styles from "./SingleEventDetails.module.scss";
 
+// Displays details about a single event, and ability for users to buy/mint a ticket
 const SingleEventDetails = () => {
     const params = useParams();
     const [baseURI, setBaseURI] = useState();
     const [eventData, setEventData] = useState();
     const [mintedTicketData, setMintedTicketData] = useState();
     const [mintedTokenId, setMintedTokenId] = useState();
-    const { isConnected, address } = useAccount();
+    const { address } = useAccount();
 
-    console.log(params.eventId);
+    // params.eventId = the contract address of the nftContractAddress, passed by react router using the userParams() hook
     const { data, fetchEventDataUser } = useContractReadsMultiDataUser(params.eventId);
 
+    // prepares the safeMint() write to the ticketCollection contract
     const { data: mintedNft, write } = useContractWrite({
         address: params.eventId,
         abi: ticketCollectionAbi,
@@ -34,6 +36,8 @@ const SingleEventDetails = () => {
         },
     });
 
+    // waits for the safeMint() write function to complete and returns the txReceipt
+    // we get the tokenId of the minted ticket through the event
     const { isLoading, isSuccess } = useWaitForTransaction({
         hash: mintedNft?.hash,
         onSuccess(data) {
@@ -42,12 +46,12 @@ const SingleEventDetails = () => {
             const mintedTokenIdHex = data.logs[0].topics[3];
             const mintedTokenIdDecimal = parseInt(utils.hexValue(mintedTokenIdHex));
             setMintedTokenId(mintedTokenIdDecimal);
-            // const val = mintedTokenId.
             console.log(`minted token id is ${mintedTokenIdDecimal}`);
             fetchEventDataUser();
         },
     });
 
+    // fetches details about the event from IPFS with tokenID 0, this is a temporary solution
     // currently fetching data from the baseURI with tokenID 0, we should change this to fetch data
     // from a general event metadata file
     useEffect(() => {
@@ -64,6 +68,7 @@ const SingleEventDetails = () => {
         fetchIpfsData();
     }, [data]);
 
+    // fetches data from the newly minted ticket 
     useEffect(() => {
         console.log(`IN SUCCESS EFFECT`);
         async function fetchMintedIpfsData() {
@@ -74,26 +79,6 @@ const SingleEventDetails = () => {
         }
         fetchMintedIpfsData();
     }, [mintedTokenId]);
-
-    // testing section
-    const { data: testRes, write: writeTestFunc } = useContractWrite({
-        address: params.eventId,
-        abi: ticketCollectionAbi,
-        functionName: "testFunc",
-        args: [5],
-        onSuccess(data) {
-            console.log(`test func written`);
-            console.log(data);
-        },
-    });
-
-    const { isLoading: is, isSuccess: suc } = useWaitForTransaction({
-        hash: testRes?.hash,
-        onSuccess(data) {
-            console.log(`Test Func completed`);
-            console.log(data);
-        },
-    });
 
     return (
         <section>
