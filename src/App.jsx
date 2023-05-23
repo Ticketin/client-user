@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router";
-import RegisterTicket from "./components/RegisterTicket/RegisterTicket";
 import ConnectButton from "./components/UI/ConnectButton";
 import Landing from "./pages/Landing";
 import Admin from "./pages/Admin";
