@@ -7,6 +7,8 @@ import ConnectButton from "../UI/ConnectButton";
 import { utils } from "ethers";
 import QRCode from "react-qr-code";
 
+import styles from "./SingleEventDetails.module.scss";
+
 const SingleEventDetails = () => {
     const params = useParams();
     const [baseURI, setBaseURI] = useState();
@@ -23,6 +25,10 @@ const SingleEventDetails = () => {
         abi: ticketCollectionAbi,
         functionName: "safeMint",
         args: [address],
+        overrides: {
+            from: address,
+            value: eventData?.ticketPrice,
+        },
         onSuccess(data) {
             console.log(data);
         },
@@ -38,6 +44,7 @@ const SingleEventDetails = () => {
             setMintedTokenId(mintedTokenIdDecimal);
             // const val = mintedTokenId.
             console.log(`minted token id is ${mintedTokenIdDecimal}`);
+            fetchEventDataUser();
         },
     });
 
@@ -95,17 +102,21 @@ const SingleEventDetails = () => {
             </div>
             <h1>Event Detail</h1>
             {eventData ? (
-                <>
+                <div className={styles.eventData}>
                     <p>Event Name: {eventData.name}</p>
-                    <p>{eventData.description}</p>
-                    <p>{eventData.ticketPrice}</p>
-                    <button onClick={() => write()}>Mint Ticket</button>
-                    <button onClick={() => writeTestFunc()}>Write Test Func</button>
-                </>
+                    <p>Event Description: {eventData.description}</p>
+                    <p>Ticket Price: {eventData.ticketPrice} wei</p>
+                    <p>Owned Tickets: {data[5].toString()}</p>
+                    <button onClick={() => write()}>Buy Ticket</button>
+                </div>
             ) : null}
             {mintedTicketData ? (
-                <div style={{ height: "auto", margin: "0 auto", maxWidth: 64, width: "100%" }}>
-                    <QRCode size={256} style={{ height: "auto", maxWidth: "100%", width: "100%" }} value={mintedTicketData.qrHash} viewBox={`0 0 256 256`} />
+                <div className={styles.mintedTicketData}>
+                    <h3>Minted Ticket</h3>
+                    <p>Ticket Id {`#${mintedTicketData.ticketId}`}</p>
+                    <div className={styles.qrCodeContainer}>
+                        <QRCode size={256} style={{ height: "auto", maxWidth: "100%", width: "100%" }} value={mintedTicketData.qrHash} viewBox={`0 0 256 256`} />
+                    </div>
                 </div>
             ) : null}
         </section>
