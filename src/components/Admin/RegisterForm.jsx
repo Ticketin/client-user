@@ -123,7 +123,7 @@ const RegisterForm = () => {
                         register={register}
                         readOnly={isMetaDataGenerated}
                         validationSchema={{
-                            required: "Event Symbol is required.",
+                            required: "Event Description is required.",
                         }}
                         required
                     />
