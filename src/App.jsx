@@ -14,13 +14,6 @@ function App() {
                 <Route path="/user" element={<User />} />
                 <Route path="/user/event/:eventId" element={<SingleEventDetails />} />
             </Routes>
-            {/* <div className="connectButton">
-                <ConnectButton />
-            </div>
-            <h1 className="title">TicketIn</h1>
-            <div className="grid-container">
-                <RegisterTicket />
-            </div> */}
         </>
     );
 }

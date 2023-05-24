@@ -4,8 +4,6 @@ import { useState } from "react";
 // This is a copy of the previous custom hook but here we add the functionality to add a image
 // to the NFT, we do this by using storeBlob: https://nftstorage.github.io/nft.storage/client/classes/lib.NFTStorage.html#storeBlob
 export const useGenerateAndUploadMetaData = (image, eventName, eventDescription, ticketAmount, ticketPrice, ticketImage) => {
-    console.log(ticketImage);
-    console.log(ticketPrice);
     const API_KEY = import.meta.env.VITE_NFTSTORAGE_API_KEY;
     const client = new NFTStorage({ token: API_KEY });
     const [collectionCid, setCollectionCid] = useState(null);

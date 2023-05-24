@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import InputField from "../UI/InputField";
 import { ticketCollectionFactoryAbi } from "../../constants";
 import styles from "./RegisterForm.module.scss";
-import useDebounce from "../../hooks/useDebounce";
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
 import { useGenerateAndUploadMetaData } from "../../hooks/useGenerateAndUploadMetadata";
 import { useState } from "react";
@@ -28,17 +27,13 @@ const RegisterForm = () => {
     const [baseURI, setBaseURI] = useState(null);
     const [isMetaDataGenerated, setIsMetaDataGenerated] = useState(false);
 
-    const { createTickets: createTickets, collectionCid: collectionCid } = useGenerateAndUploadMetaData(1, eventName, eventDescription, ticketAmount, ticketPrice, ticketImage);
+    const { createTickets: createTickets } = useGenerateAndUploadMetaData(1, eventName, eventDescription, ticketAmount, ticketPrice, ticketImage);
 
     // prepares the contract write, this way we pre-send our args to the RPC, we can catch errors before we send.
     // address: we get the right contract address by the currently connected chain
-    // enabled: only enable this hook if isConnected, debouncedAddress, debouncedName and debouncedRole are true
-    // args: all the debounched args, so we only call this hook every 0,5s max, also convert the string to bytes32
-    const {
-        config,
-        error: prepareError,
-        isError: isPrepareError,
-    } = usePrepareContractWrite({
+    // enabled: only enable this hook if baseURI is true
+    // args: all the args we pass to the deployNewTicketCollection() function
+    const { config } = usePrepareContractWrite({
         address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
         abi: ticketCollectionFactoryAbi,
         functionName: "deployNewTicketCollection",
@@ -46,15 +41,15 @@ const RegisterForm = () => {
         args: [eventName, eventSymbol, ticketAmount, ticketPrice, baseURI],
     });
 
-    const { data, error, isError, write: createNewEvent } = useContractWrite(config);
+    // writes the deployNewTicketCollection() function by passing config
+    const { data, write: createNewEvent } = useContractWrite(config);
 
     // wait for the transaction to finish so we can refresh the data on success
-    const { isLoading, isSuccess } = useWaitForTransaction({
+    const { isSuccess } = useWaitForTransaction({
         hash: data?.hash,
         onSuccess(data) {
             console.log(`event added!`);
             console.log(data);
-            // ----- OLD PART -> fetchNftContractAddress(); --------
         },
     });
 

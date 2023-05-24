@@ -1,4 +1,3 @@
-import ConnectButton from "../UI/ConnectButton";
 import RegisterForm from "./RegisterForm";
 import styles from "./RegisterTicket.module.scss";
 

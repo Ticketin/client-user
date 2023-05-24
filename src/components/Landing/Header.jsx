@@ -1,5 +1,3 @@
-import React from "react";
-
 import styles from "./Header.module.scss";
 import Navigation from "./Navigation";
 import { Link } from "react-router-dom";

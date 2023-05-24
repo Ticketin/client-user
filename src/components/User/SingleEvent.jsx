@@ -19,7 +19,6 @@ const SingleEvent = ({ index }) => {
         args: [index],
         watch: true,
         onSuccess(data) {
-            // can do stuff here
             console.log(`succesfully fetched contractAddress`);
             console.log(data);
         },
