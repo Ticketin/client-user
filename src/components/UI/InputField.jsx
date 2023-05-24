@@ -23,7 +23,7 @@ const InputField = ({ name, label, register, disabled, readOnly, errors, require
                 {label}
                 {required && "*"}
             </label>
-            <motion.input readOnly={readOnly} data-isReadOnly={readOnly} className={styles.formInput} animate={errors[name] ? "error" : "valid"} variants={variants} id={name} name={name} type={type} {...register(name, validationSchema)} />
+            <motion.input readOnly={readOnly} data-isreadonly={readOnly} className={styles.formInput} animate={errors[name] ? "error" : "valid"} variants={variants} id={name} name={name} type={type} {...register(name, validationSchema)} />
             {errors[name] && <p className={styles.errorMessage}>{errors[name]?.message}</p>}
         </div>
     );

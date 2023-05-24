@@ -6,7 +6,6 @@ import DataContext from "../context/data-context";
 // fetches all the data for the event (user) overview
 export const useContractReadsMultiDataUser = (nftContractAddress) => {
     const { address } = useAccount();
-    // const { eventDataUser, updateEventDataUser } = useContext(DataContext);
 
     const nftContractConfig = {
         address: nftContractAddress,

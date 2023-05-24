@@ -3,17 +3,24 @@ import { useState } from "react";
 
 // This is a copy of the previous custom hook but here we add the functionality to add a image
 // to the NFT, we do this by using storeBlob: https://nftstorage.github.io/nft.storage/client/classes/lib.NFTStorage.html#storeBlob
-export const useGenerateAndUploadMetaData = (image, eventName, eventDescription, ticketAmount, ticketPrice) => {
+export const useGenerateAndUploadMetaData = (image, eventName, eventDescription, ticketAmount, ticketPrice, ticketImage) => {
+    console.log(ticketImage);
+    console.log(ticketPrice);
     const API_KEY = import.meta.env.VITE_NFTSTORAGE_API_KEY;
     const client = new NFTStorage({ token: API_KEY });
     const [collectionCid, setCollectionCid] = useState(null);
 
     // edited with image stuff
-    // TODO: We might have to add a general metadata.json file at position [0] of the ticketlist, in here we can store 
+    // TODO: We might have to add a general metadata.json file at position [0] of the ticketlist, in here we can store
     // general info about the event like event description, so we dont have to store this in every single ticket.
     const createTickets = async () => {
         let ticketList = [];
-        console.log(`creating 100 tickets`);
+        console.log(`creating tickets...`);
+
+        // this part we upload the ticket image independently from the metadata as a blob
+        // later we pass te cid from the image as a property value of the ticket metadata
+        // ----------------------------------------------------------------------------
+        // hardcoded image URL
         // const res = await fetch("https://picsum.photos/id/237/200/300");
         // const blobbie = await res.blob();
         // const meta = {
@@ -23,12 +30,19 @@ export const useGenerateAndUploadMetaData = (image, eventName, eventDescription,
 
         // // stores the image to ipfs and returns the cid using the storeBlob() function
         // const imageCid = await client.storeBlob(imageFile);
+        // const ipfsImageUrl = `https://ipfs.io/ipfs/${imageCid}`;
+
+        // image from file upload
+        const imageCid = await client.storeBlob(ticketImage[0]);
+        const ipfsImageUrl = `https://ipfs.io/ipfs/${imageCid}`;
+        // ------------------------------------------------------------------------------
 
         for (let i = 0; i < ticketAmount; i++) {
             const qrHash = Math.random().toString(36).slice(2);
             const nftData = {
                 ticketId: i,
                 name: eventName,
+                image: ipfsImageUrl,
                 description: eventDescription,
                 ticketPrice: ticketPrice,
                 qrHash: qrHash,
