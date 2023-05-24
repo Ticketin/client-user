@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useContractRead } from "wagmi";
-import { ticketCollectionFactoryAbi, ticketCollectionAbi } from "../../constants";
+import { ticketCollectionFactoryAbi } from "../../constants";
 import { useContractReadsMultiDataUser } from "../../hooks/useContractReadsMultiDataUser";
 import { Link } from "react-router-dom";
 

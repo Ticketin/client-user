@@ -55,8 +55,6 @@ const SingleEventDetails = () => {
     // currently fetching data from the baseURI with tokenID 0, we should change this to fetch data
     // from a general event metadata file
     useEffect(() => {
-        console.log(`tokenURI Fetched!`);
-
         async function fetchIpfsData() {
             const baseURI = data[4];
             setBaseURI(baseURI);
@@ -70,7 +68,6 @@ const SingleEventDetails = () => {
 
     // fetches data from the newly minted ticket 
     useEffect(() => {
-        console.log(`IN SUCCESS EFFECT`);
         async function fetchMintedIpfsData() {
             const response = await fetch(`https://${baseURI}/${mintedTokenId}`);
             const jsonData = await response.json();

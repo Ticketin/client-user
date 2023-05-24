@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 import styles from "./InputField.module.scss";
 
-const InputField = ({ name, label, register, disabled, readOnly, errors, required, type, validationSchema }) => {
+const InputField = ({ name, label, register, readOnly, errors, required, type, validationSchema }) => {
     const variants = {
         valid: {
             backgroundColor: "#ffffff",

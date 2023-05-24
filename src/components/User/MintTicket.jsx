@@ -1,8 +1,7 @@
 import React from "react";
-import { usePrepareContractWrite, useContractWrite, useWaitForTransaction, useAccount, useContractRead, useContractEvent, useContractReads } from "wagmi";
+import { usePrepareContractWrite, useContractWrite, useWaitForTransaction, useAccount, useContractRead } from "wagmi";
 import { ticketCollectionFactoryAbi, ticketCollectionAbi } from "../../constants";
 import { useState } from "react";
-import nbaCardImage from "./../../assets/images/nba-card2.png";
 import nbaLogo from "./../../assets/images/nba-logo.png";
 import styles from "./MintTicket.module.scss";
 import FlipCard, { BackCard, FrontCard } from "../UI/FlipCard";

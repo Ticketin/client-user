@@ -1,6 +1,6 @@
 import React from "react";
 import {  useContractRead} from "wagmi";
-import { ticketCollectionFactoryAbi, ticketCollectionAbi } from "../../constants";
+import { ticketCollectionFactoryAbi } from "../../constants";
 import SingleEvent from "./SingleEvent";
 
 import styles from "./EventOverview.module.scss";
