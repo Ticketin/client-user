@@ -1,18 +1,12 @@
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import InputField from "../UI/InputField";
-import Dropdown from "../UI/Dropdown";
 import { ticketCollectionFactoryAbi } from "../../constants";
-
 import styles from "./RegisterForm.module.scss";
 import useDebounce from "../../hooks/useDebounce";
-import { useAccount, useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
-import { useContractReadsMultiData } from "../../hooks/useContractReadsMultiData";
-import { useContext } from "react";
-import DataContext from "../../context/data-context";
+import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
 import { useGenerateAndUploadMetaData } from "../../hooks/useGenerateAndUploadMetadata";
 import { useState } from "react";
-import { useEffect } from "react";
 
 const RegisterForm = () => {
     const {
@@ -24,19 +18,17 @@ const RegisterForm = () => {
         mode: "all", // "onChange" + "onBlur"
     });
 
+    // All variables from the form which we want to pass as arguments to the deployNewTicketCollection() function
     const eventName = watch("eventName", false); // false is defeault value
     const eventSymbol = watch("eventSymbol", false);
     const eventDescription = watch("eventDescription", false);
     const ticketAmount = watch("ticketAmount", false); // should be passed to constructor
     const ticketPrice = watch("ticketPrice", false);
+    const ticketImage = watch("ticketImage", false);
     const [baseURI, setBaseURI] = useState(null);
     const [isMetaDataGenerated, setIsMetaDataGenerated] = useState(false);
 
-    const { createTickets: createTickets, collectionCid: collectionCid } = useGenerateAndUploadMetaData(1, eventName, eventDescription, ticketAmount, ticketPrice);
-
-    // debouncing watched variables so we don't overload the RPC in usePrepareContractWrite
-    const debouncedName = useDebounce(eventName);
-    const debouncedSymbol = useDebounce(eventSymbol);
+    const { createTickets: createTickets, collectionCid: collectionCid } = useGenerateAndUploadMetaData(1, eventName, eventDescription, ticketAmount, ticketPrice, ticketImage);
 
     // prepares the contract write, this way we pre-send our args to the RPC, we can catch errors before we send.
     // address: we get the right contract address by the currently connected chain
@@ -51,13 +43,10 @@ const RegisterForm = () => {
         abi: ticketCollectionFactoryAbi,
         functionName: "deployNewTicketCollection",
         enabled: baseURI,
-        args: [debouncedName, debouncedSymbol, ticketAmount, ticketPrice, baseURI],
+        args: [eventName, eventSymbol, ticketAmount, ticketPrice, baseURI],
     });
 
     const { data, error, isError, write: createNewEvent } = useContractWrite(config);
-
-    // refetches the data of the newly deployed ticketCollection
-    const { fetchNftContractAddress } = useContractReadsMultiData();
 
     // wait for the transaction to finish so we can refresh the data on success
     const { isLoading, isSuccess } = useWaitForTransaction({
@@ -65,14 +54,12 @@ const RegisterForm = () => {
         onSuccess(data) {
             console.log(`event added!`);
             console.log(data);
-            fetchNftContractAddress();
-            // fetchMultiData();
+            // ----- OLD PART -> fetchNftContractAddress(); --------
         },
     });
 
     const onSubmit = async (data) => {
         console.log("adding new event");
-
         createNewEvent?.();
     };
 
@@ -165,6 +152,8 @@ const RegisterForm = () => {
                         }}
                         required
                     />
+                    <label>Event Image</label>
+                    <input type="file" name="ticketImage" {...register("ticketImage")} />
                     {/* <Dropdown
                         name="role"
                         label="Ticket Type"
