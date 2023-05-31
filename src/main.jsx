@@ -9,7 +9,6 @@ import { publicProvider } from "wagmi/providers/public";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 import "./assets/styles/global.scss";
-import { DataContextProvider } from "./context/data-context";
 
 const ALCHEMY_API_KEY = import.meta.env.VITE_ALCHEMY_API_KEY;
 
@@ -40,18 +39,15 @@ const client = createClient({
 ReactDOM.createRoot(document.getElementById("root")).render(
     <WagmiConfig client={client}>
         <ConnectKitProvider
+            theme="default"
             mode="light"
-            customTheme={
-                {
-                    // "--ck-accent-color": "#F3EF52",
-                    // "--ck-accent-text-color": "#ffffff",
-                }
-            }
+            customTheme={{
+                "--ck-accent-color": "rgb(15 23 42)",
+                "--ck-accent-text-color": "#ffffff",
+            }}
         >
             <BrowserRouter>
-                <DataContextProvider>
-                    <App />
-                </DataContextProvider>
+                <App />
             </BrowserRouter>
         </ConnectKitProvider>
     </WagmiConfig>
