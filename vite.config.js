@@ -10,6 +10,10 @@ export default defineConfig({
         exclude: ["nft.storage"],
     },
     build: {
-        rollupOptions: {},
+        rollupOptions: {
+            external: [
+                "nft.storage", // ignore nft.storage
+            ],
+        },
     },
 });
