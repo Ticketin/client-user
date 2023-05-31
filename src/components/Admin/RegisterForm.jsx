@@ -4,7 +4,7 @@ import InputField from "../UI/InputField";
 import { ticketCollectionFactoryAbi } from "../../constants";
 import styles from "./RegisterForm.module.scss";
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
-import { useGenerateAndUploadMetaData } from "../../hooks/useGenerateAndUploadMetadata";
+import { useGenerateAndUploadMetaData } from "../../hooks/useGenerateAndUploadMetaData";
 import { useState } from "react";
 
 const RegisterForm = () => {
