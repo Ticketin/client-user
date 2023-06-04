@@ -1,8 +1,20 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 // build
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
-})
+    plugins: [react()],
+    // in case you want to interact with rollup you can use
+
+    optimizeDeps: {
+        exclude: ["nft.storage"],
+    },
+    build: {
+        rollupOptions: {
+            external: [
+                "nft.storage", // ignore nft.storage
+            ],
+        },
+    },
+});
