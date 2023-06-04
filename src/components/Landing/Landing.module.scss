@@ -1,0 +1,114 @@
+@import "./../../assets/styles/main.scss";
+
+.header {
+    position: relative;
+    width: 100%;
+    max-height: 450px;
+}
+
+.imageOverlay {
+    background-color: black;
+    height: 100%;
+    width: 100%;
+}
+
+.headerImage {
+    -webkit-filter: brightness(75%);
+    filter: brightness(75%);
+    width: 100%;
+    max-height: 450px;
+    object-fit: cover;
+}
+
+.headingText {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+}
+
+.item {
+    background-color: blue;
+    height: 200px;
+    width: 150px;
+    margin: 0 5rem 0 5rem;
+}
+
+.sectionHeading {
+    padding: 0 20px 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sectionHeading h4 {
+    font-size: 20px;
+}
+
+.sectionHeading a {
+    font-size: 14px;
+    text-decoration: underline;
+}
+
+.sectionHeading a:hover {
+    color: $slate-300;
+}
+
+// -----------------------------
+// CAROUSEL
+// -----------------------------
+.myCarousel {
+    cursor: pointer;
+    overflow: hidden;
+    height: 330px;
+    margin-bottom: 50px;
+}
+
+.myInnerCarousel {
+    height: 90%;
+    display: flex;
+}
+
+.boxContainer {
+    -webkit-filter: brightness(95%);
+    filter: brightness(95%);
+    width: 100%;
+    max-height: 450px;
+    object-fit: cover;
+
+    height: 100%;
+    min-width: 14rem;
+    max-height: 30rem;
+    padding: 20px;
+}
+
+.boxContainer:hover {
+    -webkit-filter: brightness(110%);
+    filter: brightness(110%);
+    width: 100%;
+    max-height: 450px;
+    object-fit: cover;
+}
+
+.box {
+    border: 1px solid $slate-600;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.myImage {
+    height: 100%;
+    width: 100%;
+    object-fit: fill;
+}
+
+.eventName {
+    @include p-subtle-medium;
+}
+
+.eventDescription {
+    @include p-detail;
+    color: $slate-300;
+}

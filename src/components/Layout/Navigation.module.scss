@@ -1,0 +1,51 @@
+@import "./../../assets/styles/main.scss";
+
+.mainNavigation {
+    padding: 10px;
+}
+
+.mainNavigation ul {
+    height: 100px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.logoContainer img {
+    min-width: 50px;
+}
+
+.mainNavigation li:first-child {
+    padding: 0;
+}
+
+.mainNavigation li {
+    font-size: 14px;
+    padding: 8px 16px 8px 16px;
+}
+
+.mainNavigation li:last-child {
+    padding-right: 0px;
+}
+
+li:first-child {
+    margin-right: auto;
+}
+
+.mainNavigation a:hover,
+.mainNavigation a:active,
+.mainNavigation a.active {
+    text-decoration: underline;
+}
+
+.connectButton {
+    background-color: rgb(16 185 129);
+    border: none;
+    color: white;
+    padding: 8px 16px 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+}

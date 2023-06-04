@@ -1,0 +1,54 @@
+@import "./../../assets/styles/main.scss";
+
+.button {
+    background-color: $emerald-500;
+    color: white;
+    cursor: pointer;
+    will-change: transform;
+    transition: transform 0.25s;
+    border-radius: 6px;
+    border: none;
+    width: 100%;
+    text-align: center;
+
+    /* Button Types */
+    &.danger {
+        background-color: red !important;
+    }
+
+    &.confirm {
+        background-color: #7be5ce;
+    }
+
+    &.info {
+        background-color: white;
+    }
+
+    /* Button Size */
+    &.large {
+        font-size: 18px;
+        font-weight: 600;
+        padding: 14px 0px;
+    }
+
+    &.medium {
+        font-size: 13px;
+        font-weight: 600;
+        padding: 7px 22px;
+    }
+
+    &.small {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 0px 13px;
+    }
+
+    &.round {
+        border-radius: 25px;
+    }
+
+    /* Button Pseudo-classes */
+    &:hover {
+        transform: translate(1px, 1px);
+    }
+}

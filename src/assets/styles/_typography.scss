@@ -1,6 +1,4 @@
 // Font Families
-$font-heading: "Space Grotesk", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-$font-paragraph: "Space Mono", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 
 // Font sizes
 $fs-900: clamp(5rem, 8vw + 1rem, 9.375rem);
@@ -16,5 +14,11 @@ $fs-200: 0.775rem;
 $line-height-base: 1.5;
 
 // Font weights
-$font-weight-regular: 400;
-$font-weight-bold: 700;
+$fw-thin: 100;
+$fw-extraLight: 200;
+$fw-light: 300;
+$fw-regular: 400;
+$fw-medium: 500;
+$fw-semiBold: 600;
+$fw-bold: 700;
+$fw-extraBold: 800;
