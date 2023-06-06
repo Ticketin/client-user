@@ -20,10 +20,19 @@
     object-fit: cover;
 }
 
+.headerImage:hover {
+    -webkit-filter: brightness(85%);
+    filter: brightness(85%);
+    width: 100%;
+    max-height: 450px;
+    object-fit: cover;
+}
+
 .headingText {
     position: absolute;
     bottom: 20px;
     left: 20px;
+    text-transform: uppercase;
 }
 
 .item {
@@ -92,6 +101,7 @@
 .box {
     border: 1px solid $slate-600;
     width: 100%;
+    max-width: 200px; // sets the maxwidth so when only 1 event has been added they won't stretch to 100% width
     height: 100%;
     border-radius: 8px;
     pointer-events: none;

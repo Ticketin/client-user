@@ -1,54 +1,98 @@
 @import "./../../assets/styles/main.scss";
 
 .header {
-    aspect-ratio: 1 / 1;
-    width: 100%;
-    max-height: 500px;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  max-height: 500px;
 }
 
 .headerImage {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.purchaseSuccessful {
+  border-radius: 7px;
+  border: 1px solid $emerald-500;
+  margin-top: 20px;
+  padding: 5px;
+  background-color: $emerald-300;
+}
+
+.purchaseSuccessful p{
+  text-align: center;
 }
 
 .date {
-    @include p-ui;
-    color: $slate-300;
+  @include p-ui;
+  color: $slate-300;
+}
+
+.flexRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.priceColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.priceTitle {
+  @include p-large;
+  color: $slate-300;
+  margin-bottom: 0px;
+}
+
+.price {
+  display: flex;
+  margin-top: 0px;
+}
+
+.price p:first-child {
+  margin-right: 5px;
+}
+
+.ethIcon {
+  width: 13px;
+  color: white;
 }
 
 .buttonWrapper {
-    margin: 35px 0 35px 0;
+  margin: 35px 0 35px 0;
 }
 
 .eventDescription {
-    @include p-ui;
-    margin: 0px 0 35px 0;
+  @include p-ui;
+  margin: 0px 0 35px 0;
 }
 
 .eventInformation {
-    background-color: $slate-600;
-    padding: 16px;
-    border-radius: 6px;
-    margin-bottom: 35px;
+  background-color: $slate-600;
+  padding: 16px;
+  border-radius: 6px;
+  margin-bottom: 35px;
 }
 
 .informationTitle {
-    @include p-ui-medium;
+  @include p-ui-medium;
 }
 
 .information {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .point {
-    @include p-subtle;
-    color: $slate-300;
+  @include p-subtle;
+  color: $slate-300;
 }
 
 .details {
-    @include p-subtle-medium;
-    color: $slate-100;
-    text-align: right;
+  @include p-subtle-medium;
+  color: $slate-100;
+  text-align: right;
 }

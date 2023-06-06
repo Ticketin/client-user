@@ -13,8 +13,8 @@ function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/drops" element={<DropsPage />} />
                 <Route path="/collection" element={<CollectionPage />} />
-                <Route path="/ticket-detail" element={<TicketDetailPage />} />
-                <Route path="/buy-ticket" element={<BuyTicketPage />} />
+                <Route path="/ticket-detail/:collectionId" element={<TicketDetailPage />} />
+                <Route path="/buy-ticket/:eventId" element={<BuyTicketPage />} />
             </Routes>
         </>
     );
