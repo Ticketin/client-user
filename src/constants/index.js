@@ -1,5 +1,11 @@
 import contractAddresses from "./contractAddresses.json";
-import ticketCollectionAbi from "./TicketCollection.abi.json";
-import ticketCollectionFactoryAbi from "./TicketCollectionFactory.abi.json";
+import pockyCollectionsAbi from "./PockyCollections.abi.json";
+import pockyTicketAbi from "./Ticket.abi.json";
+import pockyTicketSalesAbi from "./PockyTicketSales.abi.json";
 
-export { contractAddresses, ticketCollectionAbi, ticketCollectionFactoryAbi };
+export {
+  contractAddresses,
+  pockyCollectionsAbi,
+  pockyTicketAbi,
+  pockyTicketSalesAbi,
+};
