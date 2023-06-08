@@ -40,6 +40,7 @@ const BuyTicket = () => {
     onSuccess(data) {
       console.log(data);
       setSingleEvent(data);
+      console.log(data.priceInETH.toString());
     },
   });
 
@@ -50,7 +51,10 @@ const BuyTicket = () => {
     isLoading: purchaseLoading,
     isSuccess: purchaseSuccess,
   } = useContractWrite({
-    address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+    address: getContractAddressByChain(
+      chain,
+      CONTRACTS.POCKYTICKETSALES_CONTRACT
+    ),
     abi: pockyTicketSalesAbi,
     functionName: "purchase",
     args: [params.eventId],
@@ -91,7 +95,7 @@ const BuyTicket = () => {
               <div className={styles.flexRow}>
                 <div className={styles.column}>
                   <h3>{singleEvent.name}</h3>
-                  <h3>{singleEvent.eventLocation}</h3>
+                  <h4 className={styles.eventLocation}>{singleEvent.eventLocation}</h4>
                 </div>
                 <div className={styles.priceColumn}>
                   <p className={styles.priceTitle}>Ticket Price</p>
