@@ -55,6 +55,7 @@ const BuyTicket = () => {
       chain,
       CONTRACTS.POCKYTICKETSALES_CONTRACT
     ),
+    gas: 200000,
     abi: pockyTicketSalesAbi,
     functionName: "purchase",
     args: [params.eventId],
@@ -95,7 +96,9 @@ const BuyTicket = () => {
               <div className={styles.flexRow}>
                 <div className={styles.column}>
                   <h3>{singleEvent.name}</h3>
-                  <h4 className={styles.eventLocation}>{singleEvent.eventLocation}</h4>
+                  <h4 className={styles.eventLocation}>
+                    {singleEvent.eventLocation}
+                  </h4>
                 </div>
                 <div className={styles.priceColumn}>
                   <p className={styles.priceTitle}>Ticket Price</p>
