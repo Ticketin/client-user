@@ -3,23 +3,21 @@ import Layout from "../Layout/Layout";
 import styles from "./TicketDetail.module.scss";
 import Section from "../UI/Section";
 import Container from "../UI/Container";
-import { useContractRead, useNetwork, useAccount } from "wagmi";
-import { Link, useParams } from "react-router-dom";
-import { pockyCollectionsAbi, pockyTicketSalesAbi } from "../../constants";
+import { useContractRead, useNetwork } from "wagmi";
+import { useParams } from "react-router-dom";
+import { pockyCollectionsAbi } from "../../constants";
 import {
   CONTRACTS,
   getContractAddressByChain,
 } from "../../utils/getContractAddressByChain";
 import { convertUnixTime } from "../../utils/convertUnixTime";
-
-import { ReactComponent as Ticket } from "./../../assets/ticket.svg";
 import { ethers } from "ethers";
 
 const TicketDetail = () => {
   const { chain } = useNetwork();
   const params = useParams();
   const [singleEvent, setSingleEvent] = useState();
-  const [ticketSvg, setTicketSvg] = useState();
+  const [base64Svg, setBase64Svg] = useState();
 
   // gets the individual collection by params.collectionId which has been passed by the collection page
   // note: this page will get changed in order to support the dnft part
@@ -46,7 +44,8 @@ const TicketDetail = () => {
     functionName: "svgOf",
     args: [params.collectionId],
     onSuccess(data) {
-      setTicketSvg(data);
+      const encodedSvg = btoa(data);
+      setBase64Svg(encodedSvg);
     },
   });
 
@@ -55,10 +54,12 @@ const TicketDetail = () => {
       {svg && singleEvent ? (
         <>
           <header className={styles.header}>
-            <div className={styles.svgWrapper}>
-              {/* <img src={`data:image/svg+xml;utf8,${encodeURIComponent(svg)}`} /> */}
-              {/* <img src={`data:image/svg+xml;base64,${base64data}`} alt="" /> */}
-              <Ticket />
+            <div className={styles.iframeWrapper}>
+              <iframe
+                type={"align=center"}
+                className={styles.svgIframe}
+                src={`https://pocky.deno.dev/render?svg=${base64Svg}`}
+              />
             </div>
           </header>
           <Section>
