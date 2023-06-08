@@ -56,6 +56,7 @@ const TicketDetail = () => {
           <header className={styles.header}>
             <div className={styles.iframeWrapper}>
               <iframe
+                scrolling="no"
                 type={"align=center"}
                 className={styles.svgIframe}
                 src={`https://pocky.deno.dev/render?svg=${base64Svg}`}
