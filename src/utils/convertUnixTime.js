@@ -1,6 +1,6 @@
 export const convertUnixTime = (unixTime) => {
     // Create a new Date object with the provided Unix time (in milliseconds)
-    const date = new Date(unixTime * 1000);
+    const date = new Date(+unixTime);
   
     // Format the date components
     const day = date.getDate();

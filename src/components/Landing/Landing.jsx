@@ -16,6 +16,7 @@ import {
   CONTRACTS,
   getContractAddressByChain,
 } from "../../utils/getContractAddressByChain";
+import { truncateText } from "../../utils/truncateText";
 
 const Landing = () => {
   const handleDragStart = (e) => e.preventDefault();
@@ -38,7 +39,7 @@ const Landing = () => {
     args: [],
     onSuccess(data) {
       console.log(`succesfully fetched`);
-      const currentDate = Math.floor(Date.now() / 1000);
+      const currentDate = Math.floor(Date.now());
 
       const eventsList = data.map((item, index) => {
         return {
@@ -74,7 +75,7 @@ const Landing = () => {
     console.log(carousel.current);
     console.log(carousel.current.scrollWidth, carousel.current.offsetWidth);
     setWidth(carousel.current.scrollWidth - carousel.current.offsetWidth);
-  }, []);
+  }, [eventsNow, eventsUpcoming]);
 
   const mouseDownCoords = (e) => {
     window.checkForDrag = e.clientX;
@@ -111,13 +112,18 @@ const Landing = () => {
             </div>
           </Link>
         </header>
-      ) : null}
+      ) : (
+        <header className={styles.placeHolderHeader}>
+          <div className={styles.headingText}>
+            <h3 className={styles.imageText}>Add a featured Event</h3>
+            <h3 className={styles.imageText}>Placeholder value</h3>
+          </div>
+        </header>
+      )}
       <Section>
         <div className={styles.sectionHeading}>
           <h4>Now</h4>
-          <Link to={"./drops"}>
-            <a>See More</a>
-          </Link>
+          <Link to={"./drops"}>See More</Link>
         </div>
         <motion.div
           ref={carousel}
@@ -129,37 +135,39 @@ const Landing = () => {
             dragConstraints={{ right: 0, left: -width }}
             className={styles.myInnerCarousel}
           >
-            {eventsNow
-              ? eventsNow.map((event, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className={styles.boxContainer}
-                      onMouseDown={(e) => mouseDownCoords(e)}
-                      onMouseUp={(e) => clickOrDrag(e, index, event.eventId)}
-                    >
-                      <motion.div className={styles.box}>
-                        <img className={styles.myImage} src={event.imageUrl} />
-                      </motion.div>
-                      <div className={styles.boxData}>
-                        <p className={styles.eventName}>{event.name}</p>
-                        <p className={styles.eventDescription}>
-                          {event.eventLocation}
-                        </p>
-                      </div>
+            {eventsNow ? (
+              eventsNow.map((event, index) => {
+                return (
+                  <div
+                    key={index}
+                    className={styles.boxContainer}
+                    onMouseDown={(e) => mouseDownCoords(e)}
+                    onMouseUp={(e) => clickOrDrag(e, index, event.eventId)}
+                  >
+                    <motion.div className={styles.box}>
+                      <img className={styles.myImage} src={event.imageUrl} />
+                    </motion.div>
+                    <div className={styles.boxData}>
+                      <p className={styles.eventName}>
+                        {truncateText(event.name, 22)}
+                      </p>
+                      <p className={styles.eventDescription}>
+                        {truncateText(event.eventLocation, 22)}
+                      </p>
                     </div>
-                  );
-                })
-              : null}
+                  </div>
+                );
+              })
+            ) : (
+              <div>Hey</div>
+            )}
           </motion.div>
         </motion.div>
       </Section>
       <Section>
         <div className={styles.sectionHeading}>
           <h4>Upcoming</h4>
-          <Link to={"./drops"}>
-            <a>See More</a>
-          </Link>
+          <Link to={"./drops"}>See More</Link>
         </div>
         <motion.div
           ref={carousel}
@@ -184,9 +192,11 @@ const Landing = () => {
                         <img className={styles.myImage} src={event.imageUrl} />
                       </motion.div>
                       <div className={styles.boxData}>
-                        <p className={styles.eventName}>{event.name}</p>
+                        <p className={styles.eventName}>
+                          {truncateText(event.name, 22)}
+                        </p>
                         <p className={styles.eventDescription}>
-                          {event.eventLocation}
+                          {truncateText(event.eventLocation, 22)}
                         </p>
                       </div>
                     </div>

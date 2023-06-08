@@ -11,6 +11,7 @@ import {
 } from "../../utils/getContractAddressByChain";
 import styles from "./Drops.module.scss";
 import { convertUnixTime } from "../../utils/convertUnixTime";
+import { truncateText } from "../../utils/truncateText";
 
 const Drops = () => {
   const [eventsNow, setEventsNow] = useState([]);
@@ -28,7 +29,7 @@ const Drops = () => {
     args: [],
     onSuccess(data) {
       console.log(`succesfully fetched`);
-      const currentDate = Math.floor(Date.now() / 1000);
+      const currentDate = Math.floor(Date.now());
 
       const eventsList = data.map((item, index) => {
         return {
@@ -74,19 +75,24 @@ const Drops = () => {
                     <>
                       <Link to={`/buy-ticket/${event.eventId}`}>
                         <div key={index} className={styles.eventRow}>
-                          <img
-                            className={styles.eventImage}
-                            src={event.imageUrl}
-                            alt="x"
-                          />
+                          <div className={styles.imageWrapper}>
+                            <img
+                              className={styles.eventImage}
+                              src={event.imageUrl}
+                              alt="x"
+                            />
+                          </div>
                           <div className={styles.eventContent}>
                             <p className={styles.eventDate}>
                               {convertUnixTime(event.startDate.toString())} -{" "}
                               {convertUnixTime(event.endDate.toString())}
                             </p>
-                            <p className={styles.eventTitle}>{event.name}</p>
+                            <p className={styles.eventTitle}>
+                              {" "}
+                              {truncateText(event.name, 70)}
+                            </p>
                             <p className={styles.eventDescription}>
-                              {event.description}
+                              {truncateText(event.description, 170)}
                             </p>
                           </div>
                         </div>
@@ -103,19 +109,23 @@ const Drops = () => {
                     <>
                       <Link to={`/buy-ticket/${event.eventId}`}>
                         <div key={index} className={styles.eventRow}>
-                          <img
-                            className={styles.eventImage}
-                            src={event.imageUrl}
-                            alt="x"
-                          />
+                          <div className={styles.imageWrapper}>
+                            <img
+                              className={styles.eventImage}
+                              src={event.imageUrl}
+                              alt="x"
+                            />
+                          </div>
                           <div className={styles.eventContent}>
                             <p className={styles.eventDate}>
                               {convertUnixTime(event.startDate.toString())} -{" "}
                               {convertUnixTime(event.endDate.toString())}
                             </p>
-                            <p className={styles.eventTitle}>{event.name}</p>
+                            <p className={styles.eventTitle}>
+                              {truncateText(event.name, 70)}
+                            </p>
                             <p className={styles.eventDescription}>
-                              {event.description}
+                              {truncateText(event.description, 170)}
                             </p>
                           </div>
                         </div>
