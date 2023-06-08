@@ -3,19 +3,21 @@ import Layout from "../Layout/Layout";
 import styles from "./TicketDetail.module.scss";
 import Section from "../UI/Section";
 import Container from "../UI/Container";
-import { useContractRead, useNetwork, useAccount } from "wagmi";
-import { Link, useParams } from "react-router-dom";
-import { pockyCollectionsAbi, pockyTicketSalesAbi } from "../../constants";
+import { useContractRead, useNetwork } from "wagmi";
+import { useParams } from "react-router-dom";
+import { pockyCollectionsAbi } from "../../constants";
 import {
   CONTRACTS,
   getContractAddressByChain,
 } from "../../utils/getContractAddressByChain";
 import { convertUnixTime } from "../../utils/convertUnixTime";
+import { ethers } from "ethers";
 
 const TicketDetail = () => {
   const { chain } = useNetwork();
   const params = useParams();
   const [singleEvent, setSingleEvent] = useState();
+  const [base64Svg, setBase64Svg] = useState();
 
   // gets the individual collection by params.collectionId which has been passed by the collection page
   // note: this page will get changed in order to support the dnft part
@@ -33,15 +35,32 @@ const TicketDetail = () => {
     },
   });
 
+  const { data: svg, refetch: fetchSvg } = useContractRead({
+    address: getContractAddressByChain(
+      chain,
+      CONTRACTS.POCKYCOLLECTIONS_CONTRACT
+    ),
+    abi: pockyCollectionsAbi,
+    functionName: "svgOf",
+    args: [params.collectionId],
+    onSuccess(data) {
+      const encodedSvg = btoa(data);
+      setBase64Svg(encodedSvg);
+    },
+  });
+
   return (
     <Layout>
-      {singleEvent ? (
+      {svg && singleEvent ? (
         <>
           <header className={styles.header}>
-            <img
-              className={styles.headerImage}
-              src={singleEvent.imageUrl}
-            ></img>{" "}
+            <div className={styles.iframeWrapper}>
+              <iframe
+                type={"align=center"}
+                className={styles.svgIframe}
+                src={`https://pocky.deno.dev/render?svg=${base64Svg}`}
+              />
+            </div>
           </header>
           <Section>
             <Container>
@@ -53,7 +72,9 @@ const TicketDetail = () => {
                       {convertUnixTime(singleEvent.endDate)}
                     </p>
                     <h3>{singleEvent.name}</h3>
-                    <h3>{singleEvent.eventLocation}</h3>
+                    <h4 className={styles.eventLocation}>
+                      {singleEvent.eventLocation}
+                    </h4>
                   </div>
                   <div className={styles.eventDescription}>
                     <p>{singleEvent.description}</p>
@@ -64,7 +85,7 @@ const TicketDetail = () => {
                 </div>
               </div>
               <div className={styles.eventInformation}>
-                <p className={styles.informationTitle}>Token Information</p>
+                <p className={styles.informationTitle}>Ticket Information</p>
                 <div className={styles.information}>
                   <div className={styles.point}>
                     <p>Location</p>
@@ -73,7 +94,10 @@ const TicketDetail = () => {
                   </div>
                   <div className={styles.details}>
                     <p>{singleEvent.eventLocation}</p>
-                    <p>{singleEvent.priceInETH.toString()}</p>
+                    {ethers.utils.formatEther(
+                      singleEvent.priceInETH.toString()
+                    )}
+                    ETH
                     <p>1</p>
                   </div>
                 </div>

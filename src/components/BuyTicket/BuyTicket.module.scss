@@ -33,6 +33,11 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.eventLocation{
+  color: $slate-300;
 }
 
 .priceColumn {
@@ -50,6 +55,7 @@
 .price {
   display: flex;
   margin-top: 0px;
+  justify-content: flex-end;
 }
 
 .price p:first-child {
