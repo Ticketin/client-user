@@ -1,60 +1,113 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../Layout/Layout";
-
-import daftPunk from "./../../assets/images/daft-punk.jpg";
-import qrCode from "./../../assets/images/qrCode.png";
 import styles from "./TicketDetail.module.scss";
 import Section from "../UI/Section";
 import Container from "../UI/Container";
-import Button from "../UI/Button";
+import { useContractRead, useNetwork } from "wagmi";
+import { useParams } from "react-router-dom";
+import { pockyCollectionsAbi } from "../../constants";
+import {
+  CONTRACTS,
+  getContractAddressByChain,
+} from "../../utils/getContractAddressByChain";
+import { convertUnixTime } from "../../utils/convertUnixTime";
+import { ethers } from "ethers";
 
 const TicketDetail = () => {
-    return (
-        <Layout>
-            <header className={styles.header}>
-                <img className={styles.headerImage} src={daftPunk}></img>{" "}
-            </header>
-            <Section>
-                <Container>
-                    <div className={styles.eventHeading}>
-                        <div className={styles.columnInfo}>
-                            <div className={styles.eventTitle}>
-                                <p className={styles.date}>05/11/2023 - 06/11/2023</p>
-                                <h3>Daft Punk</h3>
-                                <h3>Amsterdam Arena Live</h3>
-                            </div>
-                            <div className={styles.eventDescription}>
-                                <p>
-                                    Experience the electrifying energy of Daft Punk live at the iconic Amsterdam Arena. As the sun sets, the stadium transforms into a pulsating dancefloor, with a spectacular stage setup and state-of-the-art lighting, captivating the crowd from every angle. With their signature helmets and infectious beats, Daft Punk delivers an unforgettable audiovisual journey, blending their classic hits with cutting-edge remixes, leaving the audience in awe and craving for
-                                    more.
-                                </p>
-                            </div>
-                        </div>
-                        <div className={styles.columnQr}>
-                            <img src={qrCode} />
-                        </div>
-                    </div>
-                    <div className={styles.eventInformation}>
-                        <p className={styles.informationTitle}>Token Information</p>
-                        <div className={styles.information}>
-                            <div className={styles.point}>
-                                <p>Location</p>
-                                <p>Tier</p>
-                                <p>Price</p>
-                                <p>Quantity</p>
-                            </div>
-                            <div className={styles.details}>
-                                <p>Amsterdam Arena, The Netherlands</p>
-                                <p>End loge 110</p>
-                                <p>$2,010</p>
-                                <p>1</p>
-                            </div>
-                        </div>
-                    </div>
-                </Container>
-            </Section>
-        </Layout>
-    );
+  const { chain } = useNetwork();
+  const params = useParams();
+  const [singleEvent, setSingleEvent] = useState();
+  const [base64Svg, setBase64Svg] = useState();
+
+  // gets the individual collection by params.collectionId which has been passed by the collection page
+  // note: this page will get changed in order to support the dnft part
+  const { data: eventData, refetch: fetchEventData } = useContractRead({
+    address: getContractAddressByChain(
+      chain,
+      CONTRACTS.POCKYCOLLECTIONS_CONTRACT
+    ),
+    abi: pockyCollectionsAbi,
+    functionName: "get",
+    args: [params.collectionId],
+    onSuccess(data) {
+      console.log(data);
+      setSingleEvent(data);
+    },
+  });
+
+  const { data: svg, refetch: fetchSvg } = useContractRead({
+    address: getContractAddressByChain(
+      chain,
+      CONTRACTS.POCKYCOLLECTIONS_CONTRACT
+    ),
+    abi: pockyCollectionsAbi,
+    functionName: "svgOf",
+    args: [params.collectionId],
+    onSuccess(data) {
+      const encodedSvg = btoa(data);
+      setBase64Svg(encodedSvg);
+    },
+  });
+
+  return (
+    <Layout>
+      {svg && singleEvent ? (
+        <>
+          <header className={styles.header}>
+            <div className={styles.iframeWrapper}>
+              <iframe
+                type={"align=center"}
+                className={styles.svgIframe}
+                src={`https://pocky.deno.dev/render?svg=${base64Svg}`}
+              />
+            </div>
+          </header>
+          <Section>
+            <Container>
+              <div className={styles.eventHeading}>
+                <div className={styles.columnInfo}>
+                  <div className={styles.eventTitle}>
+                    <p className={styles.date}>
+                      {convertUnixTime(singleEvent.startDate)} -{" "}
+                      {convertUnixTime(singleEvent.endDate)}
+                    </p>
+                    <h3>{singleEvent.name}</h3>
+                    <h4 className={styles.eventLocation}>
+                      {singleEvent.eventLocation}
+                    </h4>
+                  </div>
+                  <div className={styles.eventDescription}>
+                    <p>{singleEvent.description}</p>
+                  </div>
+                </div>
+                <div className={styles.columnQr}>
+                  {/* <img src={qrCode} /> */}
+                </div>
+              </div>
+              <div className={styles.eventInformation}>
+                <p className={styles.informationTitle}>Ticket Information</p>
+                <div className={styles.information}>
+                  <div className={styles.point}>
+                    <p>Location</p>
+                    <p>Price</p>
+                    <p>Quantity</p>
+                  </div>
+                  <div className={styles.details}>
+                    <p>{singleEvent.eventLocation}</p>
+                    {ethers.utils.formatEther(
+                      singleEvent.priceInETH.toString()
+                    )}
+                    ETH
+                    <p>1</p>
+                  </div>
+                </div>
+              </div>
+            </Container>
+          </Section>
+        </>
+      ) : null}
+    </Layout>
+  );
 };
 
 export default TicketDetail;

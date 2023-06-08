@@ -78,6 +78,7 @@
     filter: brightness(95%);
     width: 100%;
     max-height: 450px;
+    max-width: 330px; // sets width so it won't stretch to 100% if there is only 1 item on a row
     object-fit: cover;
 }
 
