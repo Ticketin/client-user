@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import Layout from "../Layout/Layout";
 import { pockyTicketAbi } from "../../constants";
@@ -26,7 +26,7 @@ const Collection = () => {
   const { address } = useAccount();
 
   // get the token balance in preparation for tokenOfOwnerByIndex to be able to get all owned tickets per user
-  const { data: balance, refetch } = useContractRead({
+  const { data: balance, refetch: fetchBalance } = useContractRead({
     address: getContractAddressByChain(chain, CONTRACTS.TICKET_CONTRACT),
     abi: pockyTicketAbi,
     functionName: "balanceOf",
@@ -93,8 +93,8 @@ const Collection = () => {
         <Tabs.Content className={styles.tabsContent} value="tab1">
           <div className={styles.wrapper}>
             <div className={styles.row}>
-              {ownedTickets
-                ? ownedTickets.map((ticket, index) => {
+              {normalTickets
+                ? normalTickets.map((ticket, index) => {
                     return (
                       <div key={index} className={styles.column}>
                         <div className={styles.imageWrap}>
