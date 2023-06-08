@@ -13,7 +13,7 @@ import "./assets/styles/global.scss";
 const ALCHEMY_API_KEY = import.meta.env.VITE_ALCHEMY_API_KEY;
 
 const { provider, webSocketProvider, chains } = configureChains(
-  [polygonMumbai, hardhat, mainnet, goerli],
+  [polygonMumbai],
   [alchemyProvider({ apiKey: ALCHEMY_API_KEY })]
 );
 
