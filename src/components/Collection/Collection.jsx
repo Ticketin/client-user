@@ -52,7 +52,7 @@ const Collection = () => {
       let ownedTicketsList = [];
       for (let i = 0; i < balance; i++) {
         const tokenId = await contract.tokenOfOwnerByIndex(address, i);
-        const collectionId = await contract._tokenIdToCollectionId(tokenId);
+        const collectionId = await contract.tokenIdToCollectionId(tokenId);
         const tempOwnedTickets = await contract.collectionOf(tokenId);
         const modifiedOwnedTickets = { ...tempOwnedTickets, collectionId };
 
