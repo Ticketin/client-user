@@ -1,9 +1,19 @@
 @import "./../../assets/styles/main.scss";
 
 .header {
-    aspect-ratio: 1 / 1;
+    // aspect-ratio: 1 / 1;
     width: 100%;
-    max-height: 500px;
+}
+
+.svgWrapper{
+    width: 100%;
+}
+
+.svgWrapper svg{
+    border-radius: 10px;
+    background-color: $slate-800;
+    max-height: 700px;
+    width: 100%;
 }
 
 .headerImage {
@@ -34,6 +44,10 @@
 
 .date {
     @include p-ui;
+    color: $slate-300;
+}
+
+.eventLocation{
     color: $slate-300;
 }
 

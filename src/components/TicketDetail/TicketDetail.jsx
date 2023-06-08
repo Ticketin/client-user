@@ -12,10 +12,14 @@ import {
 } from "../../utils/getContractAddressByChain";
 import { convertUnixTime } from "../../utils/convertUnixTime";
 
+import { ReactComponent as Ticket } from "./../../assets/ticket.svg";
+import { ethers } from "ethers";
+
 const TicketDetail = () => {
   const { chain } = useNetwork();
   const params = useParams();
   const [singleEvent, setSingleEvent] = useState();
+  const [ticketSvg, setTicketSvg] = useState();
 
   // gets the individual collection by params.collectionId which has been passed by the collection page
   // note: this page will get changed in order to support the dnft part
@@ -33,15 +37,29 @@ const TicketDetail = () => {
     },
   });
 
+  const { data: svg, refetch: fetchSvg } = useContractRead({
+    address: getContractAddressByChain(
+      chain,
+      CONTRACTS.POCKYCOLLECTIONS_CONTRACT
+    ),
+    abi: pockyCollectionsAbi,
+    functionName: "svgOf",
+    args: [params.collectionId],
+    onSuccess(data) {
+      setTicketSvg(data);
+    },
+  });
+
   return (
     <Layout>
-      {singleEvent ? (
+      {svg && singleEvent ? (
         <>
           <header className={styles.header}>
-            <img
-              className={styles.headerImage}
-              src={singleEvent.imageUrl}
-            ></img>{" "}
+            <div className={styles.svgWrapper}>
+              {/* <img src={`data:image/svg+xml;utf8,${encodeURIComponent(svg)}`} /> */}
+              {/* <img src={`data:image/svg+xml;base64,${base64data}`} alt="" /> */}
+              <Ticket />
+            </div>
           </header>
           <Section>
             <Container>
@@ -53,7 +71,9 @@ const TicketDetail = () => {
                       {convertUnixTime(singleEvent.endDate)}
                     </p>
                     <h3>{singleEvent.name}</h3>
-                    <h3>{singleEvent.eventLocation}</h3>
+                    <h4 className={styles.eventLocation}>
+                      {singleEvent.eventLocation}
+                    </h4>
                   </div>
                   <div className={styles.eventDescription}>
                     <p>{singleEvent.description}</p>
@@ -64,7 +84,7 @@ const TicketDetail = () => {
                 </div>
               </div>
               <div className={styles.eventInformation}>
-                <p className={styles.informationTitle}>Token Information</p>
+                <p className={styles.informationTitle}>Ticket Information</p>
                 <div className={styles.information}>
                   <div className={styles.point}>
                     <p>Location</p>
@@ -73,7 +93,10 @@ const TicketDetail = () => {
                   </div>
                   <div className={styles.details}>
                     <p>{singleEvent.eventLocation}</p>
-                    <p>{singleEvent.priceInETH.toString()}</p>
+                    {ethers.utils.formatEther(
+                      singleEvent.priceInETH.toString()
+                    )}
+                    ETH
                     <p>1</p>
                   </div>
                 </div>
