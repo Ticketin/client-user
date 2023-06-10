@@ -9,6 +9,7 @@ import {
   useNetwork,
   useContractWrite,
   useAccount,
+  useWaitForTransaction,
 } from "wagmi";
 import { useParams } from "react-router-dom";
 import { pockyCollectionsAbi, pockyTicketSalesAbi } from "../../constants";
@@ -68,6 +69,10 @@ const BuyTicket = () => {
     },
   });
 
+  const { isSuccess: purchaseSuccessWaitTx, isLoading: purchaseLoadingWaitTx} = useWaitForTransaction({
+    hash: purchasedTicket?.hash,
+  })
+
   return (
     <Layout>
       {singleEvent ? (
@@ -78,7 +83,7 @@ const BuyTicket = () => {
               src={singleEvent.imageUrl}
             ></img>
           </header>
-          {purchaseSuccess ? (
+          {purchaseSuccessWaitTx ? (
             <div className={styles.purchaseSuccessful}>
               <p>
                 Purchase Successful, check the Collections Memories page to see
@@ -95,7 +100,9 @@ const BuyTicket = () => {
               <div className={styles.flexRow}>
                 <div className={styles.column}>
                   <h3>{singleEvent.name}</h3>
-                  <h4 className={styles.eventLocation}>{singleEvent.eventLocation}</h4>
+                  <h4 className={styles.eventLocation}>
+                    {singleEvent.eventLocation}
+                  </h4>
                 </div>
                 <div className={styles.priceColumn}>
                   <p className={styles.priceTitle}>Ticket Price</p>
@@ -110,7 +117,7 @@ const BuyTicket = () => {
                 </div>
               </div>
               <div className={styles.buttonWrapper}>
-                {!purchaseLoading ? (
+                {!purchaseLoading && !purchaseLoadingWaitTx ? (
                   <Button
                     content="Buy Ticket"
                     size="large"
