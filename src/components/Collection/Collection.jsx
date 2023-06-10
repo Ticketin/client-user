@@ -11,14 +11,12 @@ import {
   useNetwork,
   useAccount,
   useContract,
-  useQuery,
   useProvider,
 } from "wagmi";
 import styles from "./Collection.module.scss";
 import { Link } from "react-router-dom";
 
 const Collection = () => {
-  const [ownedTokenIds, setOwnedTokenIds] = useState([]);
   const [ownedTickets, setOwnedTickets] = useState([]);
   const [updatedTickets, setUpdatedTickets] = useState([]);
   const [normalTickets, setNormalTickets] = useState([]);
@@ -32,52 +30,51 @@ const Collection = () => {
     functionName: "balanceOf",
     args: [address],
     onSuccess(data) {
-      console.log(`succesfully fetched BALANCE = ${data}`);
-      console.log(data.toString());
+      console.log(`Ticket balance = ${data}`);
     },
   });
 
-  // prepare contract for useQuery (we have to useQuery to be able to loop over contract)
   const provider = useProvider();
-  const contract = useContract({
+  const ticketContract = useContract({
     address: getContractAddressByChain(chain, CONTRACTS.TICKET_CONTRACT),
     abi: pockyTicketAbi,
     signerOrProvider: provider,
   });
 
-  // loops over tokenOfOwnerByIndex for the balance (ERC721Enumerable)
-  const { data: ownedTokenList, refetch: fetchOwnedTokenList } = useQuery(
-    ["tokenList"],
-    async () => {
-      let ownedTicketsList = [];
-      for (let i = 0; i < balance; i++) {
-        const tokenId = await contract.tokenOfOwnerByIndex(address, i);
-        const collectionId = await contract.tokenIdToCollectionId(tokenId);
-        const tempOwnedTickets = await contract.collectionOf(tokenId);
-        const modifiedOwnedTickets = { ...tempOwnedTickets, collectionId };
+  async function getTokenList() {
+    let ownedTicketList = [];
+    for (let i = 0; i < balance; i++) {
+      const tokenId = await ticketContract.tokenOfOwnerByIndex(address, i);
+      const collectionId = await ticketContract.tokenIdToCollectionId(tokenId);
+      const tempOwnedTickets = await ticketContract.collectionOf(tokenId);
+      const modifiedOwnedTickets = { ...tempOwnedTickets, collectionId };
 
-        ownedTicketsList.push(modifiedOwnedTickets);
-        console.log(modifiedOwnedTickets);
-      }
-
-      // set all owned tickets
-      setOwnedTickets(ownedTicketsList);
-
-      // filters the currently running events
-      const tempTicketsUpdated = ownedTicketsList.filter(
-        (event) => event.updated === true
-      );
-      console.log(tempTicketsUpdated);
-      setUpdatedTickets(tempTicketsUpdated);
-
-      // filter the upcoming events
-      const tempNormalTickets = ownedTicketsList.filter(
-        (event) => event.updated === false
-      );
-      console.log(tempNormalTickets);
-      setNormalTickets(tempNormalTickets);
+      ownedTicketList.push(modifiedOwnedTickets);
     }
-  );
+    setOwnedTickets(ownedTicketList);
+
+    // filters the currently running events
+    const tempTicketsUpdated = ownedTicketList.filter(
+      (event) => event.updated === true
+    );
+    setUpdatedTickets(tempTicketsUpdated);
+
+    // filter the upcoming events
+    const tempNormalTickets = ownedTicketList.filter(
+      (event) => event.updated === false
+    );
+    setNormalTickets(tempNormalTickets);
+
+    return ownedTicketList;
+  }
+
+  useEffect(() => {
+    if (!provider) return;
+    async function fetchTokens() {
+      const tokens = await getTokenList();
+    }
+    fetchTokens();
+  }, [balance, provider]);
 
   return (
     <Layout>
