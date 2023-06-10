@@ -12,7 +12,7 @@ import "./assets/styles/global.scss";
 
 const ALCHEMY_API_KEY = import.meta.env.VITE_ALCHEMY_API_KEY;
 
-const { provider, webSocketProvider, chains } = configureChains(
+const { provider, chains } = configureChains(
   [polygonMumbai],
   [alchemyProvider({ apiKey: ALCHEMY_API_KEY })]
 );
@@ -36,7 +36,6 @@ const client = createClient({
     }),
   ],
   provider,
-  webSocketProvider,
 });
 
 ReactDOM.createRoot(document.getElementById("root")).render(
