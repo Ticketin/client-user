@@ -72,32 +72,30 @@ const Drops = () => {
             {eventsNow
               ? eventsNow.map((event, index) => {
                   return (
-                    <>
-                      <Link to={`/buy-ticket/${event.eventId}`}>
-                        <div key={index} className={styles.eventRow}>
-                          <div className={styles.imageWrapper}>
-                            <img
-                              className={styles.eventImage}
-                              src={event.imageUrl}
-                              alt="x"
-                            />
-                          </div>
-                          <div className={styles.eventContent}>
-                            <p className={styles.eventDate}>
-                              {convertUnixTime(event.startDate.toString())} -{" "}
-                              {convertUnixTime(event.endDate.toString())}
-                            </p>
-                            <p className={styles.eventTitle}>
-                              {" "}
-                              {truncateText(event.name, 70)}
-                            </p>
-                            <p className={styles.eventDescription}>
-                              {truncateText(event.description, 170)}
-                            </p>
-                          </div>
+                    <Link key={index} to={`/buy-ticket/${event.eventId}`}>
+                      <div className={styles.eventRow}>
+                        <div className={styles.imageWrapper}>
+                          <img
+                            className={styles.eventImage}
+                            src={event.imageUrl}
+                            alt="x"
+                          />
                         </div>
-                      </Link>
-                    </>
+                        <div className={styles.eventContent}>
+                          <p className={styles.eventDate}>
+                            {convertUnixTime(event.startDate.toString())} -{" "}
+                            {convertUnixTime(event.endDate.toString())}
+                          </p>
+                          <p className={styles.eventTitle}>
+                            {" "}
+                            {truncateText(event.name, 70)}
+                          </p>
+                          <p className={styles.eventDescription}>
+                            {truncateText(event.description, 170)}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
                   );
                 })
               : null}
@@ -106,31 +104,29 @@ const Drops = () => {
             {eventsUpcoming
               ? eventsUpcoming.map((event, index) => {
                   return (
-                    <>
-                      <Link to={`/buy-ticket/${event.eventId}`}>
-                        <div key={index} className={styles.eventRow}>
-                          <div className={styles.imageWrapper}>
-                            <img
-                              className={styles.eventImage}
-                              src={event.imageUrl}
-                              alt="x"
-                            />
-                          </div>
-                          <div className={styles.eventContent}>
-                            <p className={styles.eventDate}>
-                              {convertUnixTime(event.startDate.toString())} -{" "}
-                              {convertUnixTime(event.endDate.toString())}
-                            </p>
-                            <p className={styles.eventTitle}>
-                              {truncateText(event.name, 70)}
-                            </p>
-                            <p className={styles.eventDescription}>
-                              {truncateText(event.description, 170)}
-                            </p>
-                          </div>
+                    <Link key={index} to={`/buy-ticket/${event.eventId}`}>
+                      <div className={styles.eventRow}>
+                        <div className={styles.imageWrapper}>
+                          <img
+                            className={styles.eventImage}
+                            src={event.imageUrl}
+                            alt="x"
+                          />
                         </div>
-                      </Link>
-                    </>
+                        <div className={styles.eventContent}>
+                          <p className={styles.eventDate}>
+                            {convertUnixTime(event.startDate.toString())} -{" "}
+                            {convertUnixTime(event.endDate.toString())}
+                          </p>
+                          <p className={styles.eventTitle}>
+                            {truncateText(event.name, 70)}
+                          </p>
+                          <p className={styles.eventDescription}>
+                            {truncateText(event.description, 170)}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
                   );
                 })
               : null}
