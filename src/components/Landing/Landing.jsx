@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Layout from "../Layout/Layout";
 import daftPunk from "./../../assets/images/daft-punk.jpg";
 import images from "./../../images";
-import { useContractRead, useNetwork } from "wagmi";
+import { useAccount, useContractRead, useNetwork } from "wagmi";
 import { motion } from "framer-motion";
 import image1 from "./../../assets/images/carousel-images/red-bull-melbourne.jpg";
 
@@ -27,6 +27,7 @@ const Landing = () => {
   const [eventsUpcoming, setEventsUpcoming] = useState([]);
   const [featuredEvent, setFeaturedEvent] = useState();
   const { chain } = useNetwork();
+  const { isConnected } = useAccount();
 
   // gets all listed events, gets the latest featured event and filters by upcoming/now
   const { data, refetch } = useContractRead({
@@ -72,9 +73,9 @@ const Landing = () => {
   });
 
   useEffect(() => {
-    console.log(carousel.current);
-    console.log(carousel.current.scrollWidth, carousel.current.offsetWidth);
-    setWidth(carousel.current.scrollWidth - carousel.current.offsetWidth);
+    console.log(carousel?.current);
+    console.log(carousel.current?.scrollWidth, carousel?.current?.offsetWidth);
+    setWidth(carousel?.current?.scrollWidth - carousel?.current?.offsetWidth);
   }, [eventsNow, eventsUpcoming]);
 
   const mouseDownCoords = (e) => {
@@ -96,116 +97,132 @@ const Landing = () => {
 
   return (
     <Layout>
-      {featuredEvent ? (
-        <header className={styles.header}>
-          <Link to={`/buy-ticket/${featuredEvent.eventId}`}>
-            <div className={styles.imageOverlay} />
-            <img
-              className={styles.headerImage}
-              src={featuredEvent.imageUrl}
-            ></img>
-            <div className={styles.headingText}>
-              <h3 className={styles.imageText}>{featuredEvent.name}</h3>
-              <h3 className={styles.imageText}>
-                {featuredEvent.eventLocation}
-              </h3>
+      {isConnected ? (
+        <>
+          {featuredEvent ? (
+            <header className={styles.header}>
+              <Link to={`/buy-ticket/${featuredEvent.eventId}`}>
+                <div className={styles.imageOverlay} />
+                <img
+                  className={styles.headerImage}
+                  src={featuredEvent.imageUrl}
+                ></img>
+                <div className={styles.headingText}>
+                  <h3 className={styles.imageText}>{featuredEvent.name}</h3>
+                  <h3 className={styles.imageText}>
+                    {featuredEvent.eventLocation}
+                  </h3>
+                </div>
+              </Link>
+            </header>
+          ) : (
+            <header className={styles.placeHolderHeader}>
+              <div className={styles.headingText}>
+                <h3 className={styles.imageText}>Add a featured Event</h3>
+                <h3 className={styles.imageText}>Placeholder value</h3>
+              </div>
+            </header>
+          )}
+          <Section>
+            <div className={styles.sectionHeading}>
+              <h4>Now</h4>
+              <Link to={"./drops"}>See More</Link>
             </div>
-          </Link>
-        </header>
-      ) : (
-        <header className={styles.placeHolderHeader}>
-          <div className={styles.headingText}>
-            <h3 className={styles.imageText}>Add a featured Event</h3>
-            <h3 className={styles.imageText}>Placeholder value</h3>
-          </div>
-        </header>
-      )}
-      <Section>
-        <div className={styles.sectionHeading}>
-          <h4>Now</h4>
-          <Link to={"./drops"}>See More</Link>
-        </div>
-        <motion.div
-          ref={carousel}
-          className={styles.myCarousel}
-          whileTap={{ cursor: "grabbing" }}
-        >
-          <motion.div
-            drag="x"
-            dragConstraints={{ right: 0, left: -width }}
-            className={styles.myInnerCarousel}
-          >
-            {eventsNow ? (
-              eventsNow.map((event, index) => {
-                return (
-                  <div
-                    key={index}
-                    className={styles.boxContainer}
-                    onMouseDown={(e) => mouseDownCoords(e)}
-                    onMouseUp={(e) => clickOrDrag(e, index, event.eventId)}
-                  >
-                    <motion.div className={styles.box}>
-                      <img className={styles.myImage} src={event.imageUrl} />
-                    </motion.div>
-                    <div className={styles.boxData}>
-                      <p className={styles.eventName}>
-                        {truncateText(event.name, 22)}
-                      </p>
-                      <p className={styles.eventDescription}>
-                        {truncateText(event.eventLocation, 22)}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <div>Hey</div>
-            )}
-          </motion.div>
-        </motion.div>
-      </Section>
-      <Section>
-        <div className={styles.sectionHeading}>
-          <h4>Upcoming</h4>
-          <Link to={"./drops"}>See More</Link>
-        </div>
-        <motion.div
-          ref={carousel}
-          className={styles.myCarousel}
-          whileTap={{ cursor: "grabbing" }}
-        >
-          <motion.div
-            drag="x"
-            dragConstraints={{ right: 0, left: -width }}
-            className={styles.myInnerCarousel}
-          >
-            {eventsUpcoming
-              ? eventsUpcoming.map((event, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className={styles.boxContainer}
-                      onMouseDown={(e) => mouseDownCoords(e)}
-                      onMouseUp={(e) => clickOrDrag(e, index, event.eventId)}
-                    >
-                      <motion.div className={styles.box}>
-                        <img className={styles.myImage} src={event.imageUrl} />
-                      </motion.div>
-                      <div className={styles.boxData}>
-                        <p className={styles.eventName}>
-                          {truncateText(event.name, 22)}
-                        </p>
-                        <p className={styles.eventDescription}>
-                          {truncateText(event.eventLocation, 22)}
-                        </p>
+            <motion.div
+              ref={carousel}
+              className={styles.myCarousel}
+              whileTap={{ cursor: "grabbing" }}
+            >
+              <motion.div
+                drag="x"
+                dragConstraints={{ right: 0, left: -width }}
+                className={styles.myInnerCarousel}
+              >
+                {eventsNow ? (
+                  eventsNow.map((event, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className={styles.boxContainer}
+                        onMouseDown={(e) => mouseDownCoords(e)}
+                        onMouseUp={(e) => clickOrDrag(e, index, event.eventId)}
+                      >
+                        <motion.div className={styles.box}>
+                          <img
+                            className={styles.myImage}
+                            src={event.imageUrl}
+                          />
+                        </motion.div>
+                        <div className={styles.boxData}>
+                          <p className={styles.eventName}>
+                            {truncateText(event.name, 22)}
+                          </p>
+                          <p className={styles.eventDescription}>
+                            {truncateText(event.eventLocation, 22)}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })
-              : null}
-          </motion.div>
-        </motion.div>
-      </Section>
+                    );
+                  })
+                ) : (
+                  <div>Hey</div>
+                )}
+              </motion.div>
+            </motion.div>
+          </Section>
+          <Section>
+            <div className={styles.sectionHeading}>
+              <h4>Upcoming</h4>
+              <Link to={"./drops"}>See More</Link>
+            </div>
+            <motion.div
+              ref={carousel}
+              className={styles.myCarousel}
+              whileTap={{ cursor: "grabbing" }}
+            >
+              <motion.div
+                drag="x"
+                dragConstraints={{ right: 0, left: -width }}
+                className={styles.myInnerCarousel}
+              >
+                {eventsUpcoming
+                  ? eventsUpcoming.map((event, index) => {
+                      return (
+                        <div
+                          key={index}
+                          className={styles.boxContainer}
+                          onMouseDown={(e) => mouseDownCoords(e)}
+                          onMouseUp={(e) =>
+                            clickOrDrag(e, index, event.eventId)
+                          }
+                        >
+                          <motion.div className={styles.box}>
+                            <img
+                              className={styles.myImage}
+                              src={event.imageUrl}
+                            />
+                          </motion.div>
+                          <div className={styles.boxData}>
+                            <p className={styles.eventName}>
+                              {truncateText(event.name, 22)}
+                            </p>
+                            <p className={styles.eventDescription}>
+                              {truncateText(event.eventLocation, 22)}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })
+                  : null}
+              </motion.div>
+            </motion.div>
+          </Section>
+        </>
+      ) : (
+        <div className={styles.notConnected}>
+          <h2>Please Connect Your Wallet</h2>
+        </div>
+      )}
     </Layout>
   );
 };
